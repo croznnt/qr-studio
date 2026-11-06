@@ -1,0 +1,22 @@
+{
+  "name": "qr-studio",
+  "version": "1.0.0",
+  "description": "Minimal Vietnamese QR generator",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src.js --bundle --minify --outfile=app.js",
+    "start": "node server.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "esbuild": "0.28.2",
+    "qrcode": "1.5.4"
+  },
+  "devDependencies": {
+    "@zxing/library": "0.23.0",
+    "pngjs": "7.0.0"
+  }
+}
