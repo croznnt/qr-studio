@@ -1,6 +1,6 @@
 # QR Studio
 
-Trang web tạo mã QR tối giản bằng tiếng Việt. Hỗ trợ đường link, văn bản Unicode, email và WiFi. Đổi màu, tải PNG ở kích thước 512, 1024 hoặc 2048 pixel và tải SVG. Nội dung được xử lý trong trình duyệt, không gửi lên máy chủ.
+Trang web tạo mã QR tối giản bằng tiếng Việt. Hỗ trợ đường link, văn bản Unicode, email và WiFi. Có thể thêm hoặc xóa logo ở giữa mã QR. Logo được xử lý trên thiết bị, giữ nguyên tỉ lệ và nhúng vào cả PNG lẫn SVG. Khi có logo, mã dùng mức sửa lỗi H với vùng logo nhỏ có nền trắng. Nên quét thử trước khi in. Đổi màu, tải PNG ở kích thước 512, 1024 hoặc 2048 pixel và tải SVG. Nội dung được xử lý trong trình duyệt, không gửi lên máy chủ.
 
 ## Phát triển
 
