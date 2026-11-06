@@ -30,10 +30,11 @@ $('qr-form').addEventListener('change',render);
 $('qr-form').addEventListener('submit',e=>{e.preventDefault();render();});
 document.querySelectorAll('[data-color]').forEach(b=>b.addEventListener('click',()=>{$('color').value=b.dataset.color;$('color-value').textContent=b.dataset.color.toUpperCase();render();}));
 $('reset').addEventListener('click',()=>{clearLogo();Object.assign(drafts,{url:'',text:'',email:'',wifi:''});$('color').value='#202c29';$('color-value').textContent='#202C29';$('size').value='1024';switchType('url');$('content').focus();});
-async function download(format){if(!ready)return;const data=current,opts=options(),selectedLogo=logo;try{let blob;if(format==='svg'){blob=new Blob([embedLogo(await QRCode.toString(data,{...opts,type:'svg'}),selectedLogo)],{type:'image/svg+xml'});}else{const canvas=document.createElement('canvas');await QRCode.toCanvas(canvas,data,opts);drawLogo(canvas,selectedLogo);blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));}if(!blob)throw new Error();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='qr-studio.'+format;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}catch{$('status').textContent='Chưa tải được ảnh. Vui lòng thử lại.';}}
+async function download(format){if(!ready)return;const data=current,opts=options(),selectedLogo=logo?{...logo}:null;try{let blob;if(format==='svg'){blob=new Blob([embedLogo(await QRCode.toString(data,{...opts,type:'svg'}),selectedLogo)],{type:'image/svg+xml'});}else{const canvas=document.createElement('canvas');await QRCode.toCanvas(canvas,data,opts);drawLogo(canvas,selectedLogo);blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));}if(!blob)throw new Error();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='qr-studio.'+format;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}catch{$('status').textContent='Chưa tải được ảnh. Vui lòng thử lại.';}}
 $('png').addEventListener('click',()=>download('png'));$('svg').addEventListener('click',()=>download('svg'));switchType('url');
 
-function clearLogo(){logoRevision++;logo=null;$('logo-file').value='';$('logo-thumb').hidden=true;$('logo-thumb').removeAttribute('src');$('logo-name').textContent='Chưa chọn ảnh';$('remove-logo').hidden=true;$('logo-status').textContent='';}
+function clearLogo(){logoRevision++;logo=null;$('logo-size').value='14';$('logo-size-value').textContent='14%';$('logo-size-control').hidden=true;$('logo-file').value='';$('logo-thumb').hidden=true;$('logo-thumb').removeAttribute('src');$('logo-name').textContent='Chưa chọn ảnh';$('remove-logo').hidden=true;$('logo-status').textContent='';}
+$('logo-size').addEventListener('input',()=>{const percent=Number($('logo-size').value);$('logo-size-value').textContent=percent+'%';if(logo)logo={...logo,percent};});
 $('remove-logo').addEventListener('click',()=>{clearLogo();render();});
 $('logo-file').addEventListener('change',async()=>{
  const file=$('logo-file').files[0];if(!file)return;
@@ -50,7 +51,7 @@ $('logo-file').addEventListener('change',async()=>{
   canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
   const normalized=canvas.toDataURL('image/png'),raster=new Image();raster.src=normalized;await raster.decode();
   if(token!==logoRevision)return;
-  logo={image:raster,data:normalized};$('logo-thumb').src=normalized;$('logo-thumb').hidden=false;$('logo-name').textContent=file.name;$('remove-logo').hidden=false;
+  logo={image:raster,data:normalized,percent:Number($('logo-size').value)};$('logo-size-control').hidden=false;$('logo-thumb').src=normalized;$('logo-thumb').hidden=false;$('logo-name').textContent=file.name;$('remove-logo').hidden=false;
   $('logo-status').textContent='Đã thêm logo. Hãy quét thử mã trước khi in hoặc chia sẻ.';render();
  }catch(error){if(token!==logoRevision)return;$('logo-file').value='';$('logo-status').textContent=error.message.startsWith('Vui lòng')||error.message.startsWith('Ảnh quá')?error.message:'Không đọc được ảnh. Hãy thử ảnh khác.';}
 });
